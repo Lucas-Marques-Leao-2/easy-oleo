@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+
+# Build / TypeScript
+*.tsbuildinfo
+
+# Env (keep templates committed)
+.env
+.env.*
+!.env.example
+
+# Debug & tooling
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# Testing & coverage
+coverage/
+
+# Vercel
+.vercel
+
+# Turbo (if used later)
+.turbo
+
+# OS & editors
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
