@@ -1,9 +1,6 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { ThemeToggle } from "@/components/layout/theme-toggle";
-
-import { MODULE_LINKS } from "./_config/nav";
+import { MainNav } from "@/components/layout/main-nav";
 
 export default function RootGroupLayout({ children }: { children: ReactNode }) {
 	return (
@@ -13,28 +10,8 @@ export default function RootGroupLayout({ children }: { children: ReactNode }) {
 			</div>
 
 			<header className="border-b border-slate-200/90 bg-white/80 px-4 py-3 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/85">
-				<div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3">
-					<Link
-						href="/"
-						className="text-lg font-semibold text-main dark:text-main"
-					>
-						Easy Óleo
-					</Link>
-					<nav
-						className="flex flex-1 flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm"
-						aria-label="Módulos"
-					>
-						{MODULE_LINKS.map(m => (
-							<Link
-								key={m.href}
-								href={m.href}
-								className="text-typography-lv2 transition hover:text-main dark:text-slate-300 dark:hover:text-main"
-							>
-								{m.label}
-							</Link>
-						))}
-					</nav>
-					<ThemeToggle />
+				<div className="mx-auto max-w-5xl">
+					<MainNav />
 				</div>
 			</header>
 

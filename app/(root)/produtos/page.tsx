@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { ListSection, PageShell, SectionCard } from "@/components/layout/page-layout";
 import { useState } from "react";
 
 type Row = {
@@ -28,6 +28,11 @@ const SEED: Row[] = [
 		minStock: 24,
 	},
 ];
+
+const inputClass =
+	"min-w-0 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100";
+
+const labelClass = "flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400";
 
 export default function ProductsPage() {
 	const [rows, setRows] = useState<Row[]>(SEED);
@@ -75,86 +80,101 @@ export default function ProductsPage() {
 	}
 
 	return (
-		<main className="mx-auto max-w-4xl px-4 py-8 pb-16 text-[15px] leading-snug">
-			<p className="mb-3 inline-block text-sm font-medium text-main hover:underline dark:text-main">
-				<Link href="/">← Início</Link>
-			</p>
-			<header>
-				<h1 className="mb-6 text-xl font-bold tracking-tight text-typography-lv1 dark:text-slate-100">
-					Produtos
-				</h1>
-			</header>
+		<PageShell
+			title="Produtos"
+			description="Cadastro local em memória nesta tela de desenvolvimento."
+		>
+			<SectionCard
+				title="Novo"
+				titleId="produtos-novo"
+			>
+				<form onSubmit={add}>
+					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+						<label className={labelClass}>
+							Código
+							<input
+								className={inputClass}
+								value={code}
+								onChange={(e) => setCode(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Nome
+							<input
+								className={inputClass}
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Marca
+							<input
+								className={inputClass}
+								value={brand}
+								onChange={(e) => setBrand(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Tipo
+							<input
+								className={inputClass}
+								value={type}
+								onChange={(e) => setType(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Unidade
+							<input
+								className={inputClass}
+								value={unit}
+								onChange={(e) => setUnit(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Preço venda
+							<input
+								className={inputClass}
+								inputMode="decimal"
+								value={salePrice}
+								onChange={(e) => setSalePrice(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Estoque
+							<input
+								className={inputClass}
+								inputMode="numeric"
+								value={stockQuantity}
+								onChange={(e) => setStockQuantity(e.target.value)}
+							/>
+						</label>
+						<label className={labelClass}>
+							Estoque mín.
+							<input
+								className={inputClass}
+								inputMode="numeric"
+								value={minStock}
+								onChange={(e) => setMinStock(e.target.value)}
+							/>
+						</label>
+						<div className="flex items-end sm:col-span-2 lg:col-span-3 xl:col-span-4">
+							<button
+								type="submit"
+								className="rounded-md border border-main/40 bg-main/10 px-4 py-2 text-sm font-medium text-main transition hover:bg-main/15 dark:bg-main/20 dark:hover:bg-main/25"
+							>
+								Adicionar
+							</button>
+						</div>
+					</div>
+				</form>
+			</SectionCard>
 
-			<form className="mt-8" onSubmit={add}>
-				<h2 className="mb-3 text-base font-semibold text-typography-lv2 dark:text-slate-300">
-					Novo
-				</h2>
-				<div className="mb-4 flex flex-wrap items-end gap-2">
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Código
-						<input className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" value={code} onChange={(e) => setCode(e.target.value)} />
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Nome
-						<input className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" value={name} onChange={(e) => setName(e.target.value)} />
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Marca
-						<input className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" value={brand} onChange={(e) => setBrand(e.target.value)} />
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Tipo
-						<input className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" value={type} onChange={(e) => setType(e.target.value)} />
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Unidade
-						<input className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100" value={unit} onChange={(e) => setUnit(e.target.value)} />
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Preço venda
-						<input
-							className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
-							inputMode="decimal"
-							value={salePrice}
-							onChange={(e) => setSalePrice(e.target.value)}
-						/>
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Estoque
-						<input
-							className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
-							inputMode="numeric"
-							value={stockQuantity}
-							onChange={(e) => setStockQuantity(e.target.value)}
-						/>
-					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400">
-						Estoque mín.
-						<input
-							className="min-w-[8rem] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
-							inputMode="numeric"
-							value={minStock}
-							onChange={(e) => setMinStock(e.target.value)}
-						/>
-					</label>
-					<button
-						type="submit"
-						className="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-sm font-medium text-typography-lv1 shadow-sm hover:bg-slate-50 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
-					>
-						Adicionar
-					</button>
-				</div>
-			</form>
-
-			<section className="mt-8" aria-labelledby="list-heading">
-				<h2
-					id="list-heading"
-					className="mb-3 text-base font-semibold text-typography-lv2 dark:text-slate-300"
-				>
-					Lista
-				</h2>
-				<div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-					<table className="w-full border-collapse text-sm">
+			<ListSection
+				title="Lista"
+				headingId="produtos-lista"
+			>
+				<div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+					<table className="w-full min-w-[720px] border-collapse text-sm">
 						<thead>
 							<tr>
 								<th className="border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold whitespace-nowrap text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">Código</th>
@@ -196,7 +216,7 @@ export default function ProductsPage() {
 						</tbody>
 					</table>
 				</div>
-			</section>
-		</main>
+			</ListSection>
+		</PageShell>
 	);
 }
