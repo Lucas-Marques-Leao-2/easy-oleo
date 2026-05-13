@@ -1,5 +1,6 @@
 "use client";
 
+// import { useAuth, UserButton } from "@clerk/nextjs";
 import { Burger, Drawer, NavLink, Stack } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
@@ -37,6 +38,7 @@ export function MainNav() {
 	const pathname = usePathname();
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const isDesktop = useMediaQuery("(min-width: 48em)");
+	// const { isLoaded, isSignedIn } = useAuth();
 
 	useEffect(() => {
 		close();
@@ -79,6 +81,29 @@ export function MainNav() {
 				</nav>
 
 				<div className="ml-auto flex shrink-0 items-center gap-2">
+					{/* {isLoaded &&
+						(isSignedIn ? (
+							<UserButton
+								appearance={{
+									elements: {
+										avatarBox: "h-9 w-9 ring-1 ring-slate-200/80 dark:ring-slate-600",
+									},
+								}}
+							/>
+						) : (
+							<Link
+								href="/login"
+								className="rounded-md px-2.5 py-1.5 text-sm font-medium text-main hover:bg-main/10 dark:hover:bg-main/15"
+							>
+								Entrar
+							</Link>
+						))} */}
+					<Link
+						href="/login"
+						className="rounded-md px-2.5 py-1.5 text-sm font-medium text-main hover:bg-main/10 dark:hover:bg-main/15"
+					>
+						Entrar
+					</Link>
 					<ThemeToggle />
 					<Burger
 						opened={opened}

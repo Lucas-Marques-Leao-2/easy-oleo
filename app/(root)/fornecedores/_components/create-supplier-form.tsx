@@ -135,10 +135,7 @@ export function CreateSupplierForm() {
 						{...form.register("number", { required: "Obrigatório." })}
 					/>
 				</Group>
-				<Group grow>
-					<TextInput label="Complemento" {...form.register("complement")} />
-					<TextInput label="Bairro" {...form.register("district")} />
-				</Group>
+				<TextInput label="Bairro" {...form.register("district")} />
 				<Group grow>
 					<TextInput
 						label="Cidade"

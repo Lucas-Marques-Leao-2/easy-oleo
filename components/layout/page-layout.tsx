@@ -34,7 +34,6 @@ type SectionCardProps = {
   className?: string;
 };
 
-/** Bloco com borda (ex.: formulário “Novo”). */
 export function SectionCard({
   title,
   titleId,

@@ -7,7 +7,7 @@ import {
 } from "@/components/layout/page-layout";
 import { CpfInput } from "@/components/ui/cpf-input";
 import { formatCPF } from "@/lib/format-brazilian-doc";
-import { UpdateUserDtoRole as UserRole } from "@/openapi/client/models";
+import { Button, Group, SimpleGrid, Stack, TextInput } from "@mantine/core";
 import { useState } from "react";
 
 type UserRow = {
@@ -15,7 +15,6 @@ type UserRow = {
   name: string;
   email: string;
   cpf: string;
-  role: UserRole;
 };
 
 const INITIAL_ROWS: UserRow[] = [
@@ -24,28 +23,14 @@ const INITIAL_ROWS: UserRow[] = [
     name: "Carla Administradora",
     email: "carla@easyoleo.local",
     cpf: "52998224725",
-    role: "ADMIN",
   },
 ];
-
-const ROLE_LABELS_PT: Record<UserRole, string> = {
-  ATTENDANT: "Atendente",
-  SELLER: "Vendedor(a)",
-  ADMIN: "Administrador(a)",
-};
-
-const inputClass =
-  "min-w-0 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-typography-lv1 shadow-sm focus:border-main focus:outline-none focus:ring-1 focus:ring-main dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100";
-
-const labelClass =
-  "flex flex-col gap-1 text-xs font-medium text-typography-lv2 dark:text-slate-400";
 
 export default function UsersPage() {
   const [rows, setRows] = useState<UserRow[]>(INITIAL_ROWS);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
-  const [role, setRole] = useState<UserRole>("ATTENDANT");
 
   function handleAdd(e: React.FormEvent) {
     e.preventDefault();
@@ -57,13 +42,11 @@ export default function UsersPage() {
         name: name.trim(),
         email: email.trim(),
         cpf: cpf.replace(/\D/g, "") || "—",
-        role,
       },
     ]);
     setName("");
     setEmail("");
     setCpf("");
-    setRole("ATTENDANT");
   }
 
   function handleRemoveRow(id: string) {
@@ -73,52 +56,31 @@ export default function UsersPage() {
   return (
     <PageShell
       title="Usuários"
-      description="Lista local em memória nesta tela de desenvolvimento."
+      description="Lista local (RF09). Perfil/cargo (RN14) fica no cadastro real via API, não neste mock."
     >
       <SectionCard title="Novo" titleId="usuarios-novo">
         <form onSubmit={handleAdd}>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <label className={labelClass}>
-              Nome
-              <input
-                className={inputClass}
+          <Stack gap="sm">
+            <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="sm">
+              <TextInput
+                label="Nome"
+                required
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.currentTarget.value)}
               />
-            </label>
-            <label className={labelClass}>
-              E-mail
-              <input
-                className={inputClass}
+              <TextInput
+                label="E-mail"
                 type="email"
+                required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.currentTarget.value)}
               />
-            </label>
-            <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-              <CpfInput label="CPF" value={cpf} onChange={setCpf} size="xs" />
-            </div>
-            <label className={`${labelClass} sm:col-span-2 lg:col-span-1`}>
-              Cargo
-              <select
-                className={inputClass}
-                value={role}
-                onChange={(e) => setRole(e.target.value as UserRole)}
-              >
-                <option value="ATTENDANT">{ROLE_LABELS_PT.ATTENDANT}</option>
-                <option value="SELLER">{ROLE_LABELS_PT.SELLER}</option>
-                <option value="ADMIN">{ROLE_LABELS_PT.ADMIN}</option>
-              </select>
-            </label>
-            <div className="flex items-end sm:col-span-2 lg:col-span-3">
-              <button
-                type="submit"
-                className="rounded-md border border-main/40 bg-main/10 px-4 py-2 text-sm font-medium text-main transition hover:bg-main/15 dark:bg-main/20 dark:hover:bg-main/25"
-              >
-                Adicionar
-              </button>
-            </div>
-          </div>
+              <CpfInput label="CPF" value={cpf} onChange={setCpf} />
+            </SimpleGrid>
+            <Group justify="flex-end">
+              <Button type="submit">Adicionar</Button>
+            </Group>
+          </Stack>
         </form>
       </SectionCard>
 
@@ -135,9 +97,6 @@ export default function UsersPage() {
                 </th>
                 <th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                   CPF
-                </th>
-                <th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                  Cargo
                 </th>
                 <th
                   className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -161,16 +120,15 @@ export default function UsersPage() {
                     {row.cpf === "—" ? "—" : formatCPF(row.cpf)}
                   </td>
                   <td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
-                    {ROLE_LABELS_PT[row.role]}
-                  </td>
-                  <td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
-                    <button
+                    <Button
                       type="button"
-                      className="rounded-md border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/50"
+                      variant="light"
+                      color="red"
+                      size="xs"
                       onClick={() => handleRemoveRow(row.id)}
                     >
                       Remover
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
