@@ -1,6 +1,6 @@
 export const clerkAppearance = {
 	elements: {
-		rootBox: "mx-auto w-full",
+		rootBox: "mx-auto w-full flex justify-center items-center",
 		card: "rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-900/10",
 		cardBox: "shadow-none",
 		footer: "bg-transparent",
