@@ -1,6 +1,7 @@
 "use client";
 
 import { ListSection, PageShell } from "@/components/layout/page-layout";
+import { ListTableSkeleton } from "@/components/loading/list-table-skeleton";
 import { useUser } from "@/components/context/user-provider";
 import { useApiAuth } from "@/hooks/use-api-auth";
 import { useUserRole } from "@/hooks/use-user-role";
@@ -67,7 +68,12 @@ export default function UsersPage() {
 	if (jwt && isMePending) {
 		return (
 			<PageShell title="Usuários">
-				<p className="text-sm text-typography-lv2 dark:text-slate-400">Carregando permissões…</p>
+				<ListTableSkeleton
+					columnLabels={["Nome", "E-mail", "CPF", "Perfil", "Ações"]}
+					minWidth="720px"
+					rows={6}
+					loadingLabel="Carregando permissões…"
+				/>
 			</PageShell>
 		);
 	}
@@ -110,9 +116,11 @@ export default function UsersPage() {
 				}
 			>
 				{isPending && (
-					<p className="text-sm text-typography-lv2 dark:text-slate-400">
-						Carregando…
-					</p>
+					<ListTableSkeleton
+						columnLabels={["Nome", "E-mail", "CPF", "Perfil", "Ações"]}
+						minWidth="720px"
+						loadingLabel="Carregando usuários…"
+					/>
 				)}
 				{isError && (
 					<p className="text-sm text-red-600 dark:text-red-400" role="alert">

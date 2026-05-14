@@ -2,6 +2,7 @@
 
 import { useUser } from "@/components/context/user-provider";
 import { ListSection, PageShell } from "@/components/layout/page-layout";
+import { ListTableSkeleton } from "@/components/loading/list-table-skeleton";
 import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import {
@@ -324,9 +325,12 @@ export default function SalesOrdersPage() {
 				}
 			>
 				{ordersLoading && (
-					<Text size="sm" c="dimmed">
-						Carregando pedidos…
-					</Text>
+					<ListTableSkeleton
+						columnLabels={["Data", "Cliente", "Total", "Status", "Ações"]}
+						minWidth="720px"
+						rows={7}
+						loadingLabel="Carregando pedidos de venda…"
+					/>
 				)}
 
 				{listError && (

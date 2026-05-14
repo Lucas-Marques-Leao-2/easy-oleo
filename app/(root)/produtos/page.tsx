@@ -1,6 +1,7 @@
 "use client";
 
 import { ListSection, PageShell } from "@/components/layout/page-layout";
+import { ListTableSkeleton } from "@/components/loading/list-table-skeleton";
 import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import {
@@ -125,7 +126,22 @@ export default function ProductsPage() {
 				}
 			>
 				{isPending && (
-					<p className="text-sm text-typography-lv2 dark:text-slate-400">Carregando…</p>
+					<ListTableSkeleton
+						columnLabels={[
+							"Código",
+							"Nome",
+							"Marca",
+							"Tipo",
+							"Visc.",
+							"Un.",
+							"Preço",
+							"Estoque",
+							"Mín.",
+							"Ações",
+						]}
+						minWidth="720px"
+						loadingLabel="Carregando produtos…"
+					/>
 				)}
 				{isError && (
 					<p className="text-sm text-red-600 dark:text-red-400" role="alert">

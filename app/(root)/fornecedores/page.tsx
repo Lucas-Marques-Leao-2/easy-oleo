@@ -9,6 +9,7 @@ import {
 	ListSection,
 	PageShell,
 } from "@/components/layout/page-layout";
+import { ListTableSkeleton } from "@/components/loading/list-table-skeleton";
 import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import { formatCNPJ } from "@/lib/format-brazilian-doc";
@@ -62,9 +63,18 @@ export default function SuppliersPage() {
 				}
 			>
 				{isPending && (
-					<p className="text-sm text-typography-lv2 dark:text-slate-400">
-						Carregando…
-					</p>
+					<ListTableSkeleton
+						columnLabels={[
+							"Razão social",
+							"CNPJ",
+							"Cidade / UF",
+							"E-mail",
+							"Telefones",
+							"Ações",
+						]}
+						minWidth="640px"
+						loadingLabel="Carregando fornecedores…"
+					/>
 				)}
 
 				{isError && (

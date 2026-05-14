@@ -1,6 +1,7 @@
 "use client";
 
 import { ListSection, PageShell } from "@/components/layout/page-layout";
+import { MantinePurchaseOrdersTableSkeleton } from "@/components/loading/list-table-skeleton";
 import { useUser } from "@/components/context/user-provider";
 import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
@@ -250,11 +251,7 @@ export default function PurchasesPage() {
 					</Button>
 				}
 			>
-				{ordersLoading && (
-					<Text size="sm" c="dimmed">
-						Carregando…
-					</Text>
-				)}
+				{ordersLoading && <MantinePurchaseOrdersTableSkeleton />}
 
 				{listError && (
 					<Text size="sm" c="red" role="alert">
