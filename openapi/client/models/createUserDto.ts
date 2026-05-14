@@ -31,12 +31,6 @@ export interface CreateUserDto {
   /** @minLength 8 */
   zipCode: string;
   email: string;
-  /**
-     * Senha em texto; armazenada com hash.
-     * @minLength 8
-     * @maxLength 72
-     */
-  password: string;
   role?: CreateUserDtoRole;
   phones?: string[];
 }

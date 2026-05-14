@@ -197,6 +197,98 @@ export function useUsersControllerFindAll<TData = Awaited<ReturnType<typeof user
 
 
 /**
+ * @summary Usuário autenticado (me)
+ */
+export const usersControllerFindMe = (
+
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return axiosInstance<UserResponse>(
+      {url: `/users/me`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getUsersControllerFindMeQueryKey = () => {
+    return [
+    `/users/me`
+    ] as const;
+    }
+
+
+export const getUsersControllerFindMeQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerFindMe>>, TError = ErrorType<HttpNotFoundResponse>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindMe>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUsersControllerFindMeQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerFindMe>>> = ({ signal }) => usersControllerFindMe(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindMe>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type UsersControllerFindMeQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerFindMe>>>
+export type UsersControllerFindMeQueryError = ErrorType<HttpNotFoundResponse>
+
+
+export function useUsersControllerFindMe<TData = Awaited<ReturnType<typeof usersControllerFindMe>>, TError = ErrorType<HttpNotFoundResponse>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindMe>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof usersControllerFindMe>>,
+          TError,
+          Awaited<ReturnType<typeof usersControllerFindMe>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUsersControllerFindMe<TData = Awaited<ReturnType<typeof usersControllerFindMe>>, TError = ErrorType<HttpNotFoundResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindMe>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof usersControllerFindMe>>,
+          TError,
+          Awaited<ReturnType<typeof usersControllerFindMe>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUsersControllerFindMe<TData = Awaited<ReturnType<typeof usersControllerFindMe>>, TError = ErrorType<HttpNotFoundResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindMe>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Usuário autenticado (me)
+ */
+
+export function useUsersControllerFindMe<TData = Awaited<ReturnType<typeof usersControllerFindMe>>, TError = ErrorType<HttpNotFoundResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindMe>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getUsersControllerFindMeQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+/**
  * @summary Obtém usuário por id
  */
 export const usersControllerFindOne = (

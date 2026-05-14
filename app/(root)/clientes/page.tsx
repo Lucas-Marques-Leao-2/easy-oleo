@@ -6,6 +6,7 @@ import { Modal, Button } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { ListSection, PageShell } from "@/components/layout/page-layout";
+import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import { formatCpfOrCnpjDocument } from "@/lib/format-brazilian-doc";
 import {
@@ -20,13 +21,17 @@ export default function CustomersPage() {
 	const [opened, setOpened] = useState(false);
 
 	const queryClient = useQueryClient();
+	const auth = useApiAuth();
 
 	const {
 		data: customers = [],
 		isPending,
 		isError,
 		error,
-	} = useCustomersControllerFindAll();
+	} = useCustomersControllerFindAll({
+		query: { retry: false },
+		request: auth,
+	});
 
 	const remove = useCustomersControllerRemove({
 		mutation: {
@@ -39,6 +44,7 @@ export default function CustomersPage() {
 				console.error(err);
 			},
 		},
+		request: auth,
 	});
 
 	return (
@@ -46,13 +52,12 @@ export default function CustomersPage() {
 			<ListSection
 				title="Lista"
 				headingId="clientes-lista"
-			>
-				<div className="mb-4 flex justify-end">
+				actions={
 					<Button onClick={() => setOpened(true)}>
 						Adicionar
 					</Button>
-				</div>
-
+				}
+			>
 				{isPending && (
 					<p className="text-sm text-typography-lv2 dark:text-slate-400">
 						Carregando…
@@ -146,7 +151,7 @@ export default function CustomersPage() {
 				<Modal
 					opened={opened}
 					onClose={() => setOpened(false)}
-					title="Adicionar cliente"
+					title="Novo cliente"
 					centered
 					size="lg"
 				>

@@ -59,19 +59,50 @@ export function SectionCard({
 
 type ListSectionProps = {
   title: string;
+  subtitle?: string;
   headingId: string;
+  actions?: ReactNode;
   children: ReactNode;
 };
 
-export function ListSection({ title, headingId, children }: ListSectionProps) {
+export function ListSection({
+  title,
+  subtitle,
+  headingId,
+  actions,
+  children,
+}: ListSectionProps) {
+  const descId = `${headingId}-desc`;
+
   return (
-    <section aria-labelledby={headingId} className="min-w-0">
-      <h2
-        id={headingId}
-        className="mb-3 text-base font-semibold text-typography-lv2 dark:text-slate-300"
-      >
-        {title}
-      </h2>
+    <section
+      aria-labelledby={headingId}
+      aria-describedby={subtitle ? descId : undefined}
+      className="min-w-0"
+    >
+      <div className="mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="min-w-0 flex-1">
+          <h2
+            id={headingId}
+            className="text-base font-semibold text-typography-lv2 dark:text-slate-300"
+          >
+            {title}
+          </h2>
+          {subtitle ? (
+            <p
+              id={descId}
+              className="mt-1 max-w-2xl text-sm leading-snug text-typography-lv3 dark:text-slate-400"
+            >
+              {subtitle}
+            </p>
+          ) : null}
+        </div>
+        {actions ? (
+          <div className="flex shrink-0 items-center justify-start sm:justify-end">
+            {actions}
+          </div>
+        ) : null}
+      </div>
       {children}
     </section>
   );

@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 
-import { Modal } from "@mantine/core";
+import { Modal, Button } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 
 import {
 	ListSection,
 	PageShell,
-	SectionCard,
 } from "@/components/layout/page-layout";
+import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import { formatCNPJ } from "@/lib/format-brazilian-doc";
 import {
@@ -24,13 +24,17 @@ export default function SuppliersPage() {
 	const [opened, setOpened] = useState(false);
 
 	const queryClient = useQueryClient();
+	const auth = useApiAuth();
 
 	const {
 		data: suppliers = [],
 		isPending,
 		isError,
 		error,
-	} = useSuppliersControllerFindAll();
+	} = useSuppliersControllerFindAll({
+		query: { retry: false },
+		request: auth,
+	});
 
 	const remove = useSuppliersControllerRemove({
 		mutation: {
@@ -43,6 +47,7 @@ export default function SuppliersPage() {
 				console.error(err);
 			},
 		},
+		request: auth,
 	});
 
 	return (
@@ -50,17 +55,12 @@ export default function SuppliersPage() {
 			<ListSection
 				title="Lista"
 				headingId="fornecedores-lista"
-			>
-				<div className="mb-4 flex justify-end">
-					<button
-						type="button"
-						onClick={() => setOpened(true)}
-						className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
-					>
+				actions={
+					<Button onClick={() => setOpened(true)}>
 						Adicionar
-					</button>
-				</div>
-
+					</Button>
+				}
+			>
 				{isPending && (
 					<p className="text-sm text-typography-lv2 dark:text-slate-400">
 						Carregando…
@@ -154,7 +154,7 @@ export default function SuppliersPage() {
 				<Modal
 					opened={opened}
 					onClose={() => setOpened(false)}
-					title="Adicionar fornecedor"
+					title="Novo fornecedor"
 					centered
 					size="lg"
 				>

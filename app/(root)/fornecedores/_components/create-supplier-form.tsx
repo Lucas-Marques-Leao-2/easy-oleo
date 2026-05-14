@@ -2,6 +2,7 @@
 
 import { CepInput } from "@/components/ui/cep-input";
 import { CnpjInput } from "@/components/ui/cnpj-input";
+import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import type { CreateSupplierDto } from "@/openapi/client/models/createSupplierDto";
 import {
@@ -49,6 +50,7 @@ const defaultValues: CreateSupplierFormValues = {
 
 export function CreateSupplierForm() {
 	const queryClient = useQueryClient();
+	const auth = useApiAuth();
 
 	const form = useForm<CreateSupplierFormValues>({
 		defaultValues,
@@ -78,6 +80,7 @@ export function CreateSupplierForm() {
 				});
 			},
 		},
+		request: auth,
 	});
 
 	return (

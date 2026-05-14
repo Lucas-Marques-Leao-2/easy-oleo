@@ -1,6 +1,8 @@
 "use client";
 
+import { useUser } from "@/components/context/user-provider";
 import { ListSection, PageShell } from "@/components/layout/page-layout";
+import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import {
 	parseIsoDateToLocalDate,
@@ -44,6 +46,8 @@ const STATUS_LABELS_PT: Record<SaleOrderResponseStatus, string> = {
 
 export default function SalesOrdersPage() {
 	const queryClient = useQueryClient();
+	const auth = useApiAuth();
+	const { user: meUser } = useUser();
 
 	const [opened, setOpened] = useState(false);
 
@@ -60,34 +64,52 @@ export default function SalesOrdersPage() {
 		isError: ordersError,
 		error: ordersErrorObj,
 		refetch: refetchOrders,
-	} = useSaleOrdersControllerFindAll();
+	} = useSaleOrdersControllerFindAll({
+		query: { retry: false },
+		request: auth,
+	});
 
 	const {
 		data: customers = [],
 		isPending: customersLoading,
 		isError: customersError,
 		error: customersErrorObj,
-	} = useCustomersControllerFindAll();
+	} = useCustomersControllerFindAll({
+		query: { retry: false },
+		request: auth,
+	});
 
 	const {
 		data: products = [],
 		isPending: productsLoading,
 		isError: productsError,
 		error: productsErrorObj,
-	} = useProductsControllerFindAll();
+	} = useProductsControllerFindAll({
+		query: { retry: false },
+		request: auth,
+	});
 
 	const {
 		data: users = [],
 		isPending: usersLoading,
 		isError: usersError,
 		error: usersErrorObj,
-	} = useUsersControllerFindAll();
+	} = useUsersControllerFindAll({
+		query: { retry: false },
+		request: auth,
+	});
 
 	useEffect(() => {
-		if (users.length > 0 && createdByUserId === null) {
+		if (meUser?.id) {
+			setCreatedByUserId(meUser.id);
+		}
+	}, [meUser?.id]);
+
+	useEffect(() => {
+		if (!meUser?.id && users.length > 0 && createdByUserId === null) {
 			setCreatedByUserId(users[0].id);
 		}
-	}, [users, createdByUserId]);
+	}, [meUser?.id, users, createdByUserId]);
 
 	const customerSelectData = useMemo(
 		() =>
@@ -149,6 +171,7 @@ export default function SalesOrdersPage() {
 				});
 			},
 		},
+		request: auth,
 	});
 
 	const removeOrder = useSaleOrdersControllerRemove({
@@ -170,6 +193,7 @@ export default function SalesOrdersPage() {
 				});
 			},
 		},
+		request: auth,
 	});
 
 	const confirmOrder = useSaleOrdersControllerConfirm({
@@ -191,6 +215,7 @@ export default function SalesOrdersPage() {
 				});
 			},
 		},
+		request: auth,
 	});
 
 	function addLineItem() {
@@ -288,20 +313,16 @@ export default function SalesOrdersPage() {
 			: null;
 
 	return (
-		<PageShell
-			title="Pedidos de venda"
-			description="POST /sale-orders com cliente, usuário que registra, data opcional e itens (produto + quantidade). Lista via GET /sale-orders."
-		>
+		<PageShell title="Pedidos de venda">
 			<ListSection
 				title="Lista"
 				headingId="pedidos-venda-lista"
-			>
-				<div className="mb-4 flex justify-end">
+				actions={
 					<Button onClick={() => setOpened(true)}>
 						Adicionar
 					</Button>
-				</div>
-
+				}
+			>
 				{ordersLoading && (
 					<Text size="sm" c="dimmed">
 						Carregando pedidos…
@@ -458,7 +479,7 @@ export default function SalesOrdersPage() {
 				<Modal
 					opened={opened}
 					onClose={() => setOpened(false)}
-					title="Adicionar pedido de venda"
+					title="Novo pedido de venda"
 					centered
 					size="xl"
 				>
@@ -539,7 +560,6 @@ export default function SalesOrdersPage() {
 
 								<Select
 									label="Registrado por"
-									description="Usuário vinculado ao pedido (createdBy), até haver login na sessão."
 									placeholder={
 										usersLoading
 											? "Carregando…"

@@ -597,6 +597,34 @@
         "tags": ["Users"]
       }
     },
+    "/users/me": {
+      "get": {
+        "operationId": "UsersController_findMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Perfil encontrado.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpNotFoundResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Usuário autenticado (me)",
+        "tags": ["Users"]
+      }
+    },
     "/users/{id}": {
       "get": {
         "operationId": "UsersController_findOne",
@@ -1570,13 +1598,6 @@
             "format": "email",
             "example": "carla@easyoleo.local"
           },
-          "password": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 72,
-            "description": "Senha em texto; armazenada com hash.",
-            "example": "SenhaSegura1!"
-          },
           "role": {
             "type": "string",
             "enum": ["ATTENDANT", "SELLER", "ADMIN"],
@@ -1596,8 +1617,7 @@
           "city",
           "state",
           "zipCode",
-          "email",
-          "password"
+          "email"
         ],
         "example": {
           "name": "Carla Administradora",
@@ -1608,7 +1628,6 @@
           "state": "AL",
           "zipCode": "57020000",
           "email": "carla@easyoleo.local",
-          "password": "SenhaSegura1!",
           "role": "ADMIN",
           "phones": ["82991112233"]
         }

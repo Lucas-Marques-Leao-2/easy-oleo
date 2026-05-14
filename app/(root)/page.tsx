@@ -1,7 +1,5 @@
-import Link from "next/link";
-
 import { HomeMain } from "@/components/layout/page-layout";
-import { MODULE_LINKS } from "@/lib/nav";
+import { HomeModuleLinks } from "@/components/home/home-module-links";
 
 export default function HomePage() {
 	return (
@@ -11,11 +9,11 @@ export default function HomePage() {
 					Easy Óleo — distribuição de óleo automotivo
 				</h1>
 				<p
-					className="rounded-lg border border-amber-300/80 bg-amber-50 px-3 py-2 text-sm text-amber-950 dark:border-amber-700/50 dark:bg-amber-950/40 dark:text-amber-100"
+					className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"
 					role="status"
 				>
-					<strong>Easy Óleo:</strong> nesta versão de desenvolvimento, alguns módulos usam dados em memória (
-					<code className="rounded bg-amber-100/80 px-1 dark:bg-amber-900/60">useState</code>) e não a API.
+					Acesso restrito a usuários autenticados. O perfil na API é criado/atualizado pelo webhook Clerk
+					(configurado no backend).
 				</p>
 			</header>
 
@@ -26,18 +24,7 @@ export default function HomePage() {
 				>
 					Acesso rápido
 				</h2>
-				<ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-					{MODULE_LINKS.map(m => (
-						<li key={m.href}>
-							<Link
-								href={m.href}
-								className="flex rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-sm font-medium text-main shadow-sm transition hover:border-main/40 hover:bg-main/5 dark:border-slate-700 dark:bg-slate-900/80 dark:text-main dark:hover:bg-main/10"
-							>
-								{m.label}
-							</Link>
-						</li>
-					))}
-				</ul>
+				<HomeModuleLinks />
 			</section>
 		</HomeMain>
 	);

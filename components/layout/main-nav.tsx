@@ -1,11 +1,11 @@
 "use client";
 
-// import { useAuth, UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import { Burger, Drawer, NavLink, Stack } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import type { IconType } from "react-icons";
 import {
 	HiArrowDownTray,
@@ -16,7 +16,8 @@ import {
 	HiUsers,
 } from "react-icons/hi2";
 
-import { MODULE_LINKS } from "@/lib/nav";
+import { useUser } from "@/components/context/user-provider";
+import { MODULE_LINKS, moduleLinksVisibleForAppUser } from "@/lib/nav";
 
 import { ThemeToggle } from "./theme-toggle";
 
@@ -38,7 +39,9 @@ export function MainNav() {
 	const pathname = usePathname();
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const isDesktop = useMediaQuery("(min-width: 48em)");
-	// const { isLoaded, isSignedIn } = useAuth();
+	const { isLoaded, isSignedIn } = useAuth();
+	const { user: appUser } = useUser();
+	const visibleModuleLinks = useMemo(() => moduleLinksVisibleForAppUser(appUser), [appUser]);
 
 	useEffect(() => {
 		close();
@@ -51,10 +54,7 @@ export function MainNav() {
 	return (
 		<>
 			<div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:gap-4">
-				<Link
-					href="/"
-					className="shrink-0 text-lg font-semibold text-main dark:text-main"
-				>
+				<Link href="/" className="shrink-0 text-lg font-semibold text-main dark:text-main">
 					Easy Óleo
 				</Link>
 
@@ -62,7 +62,7 @@ export function MainNav() {
 					className="hidden min-w-0 flex-1 flex-wrap items-center justify-center gap-x-1 gap-y-1 md:flex lg:gap-x-2"
 					aria-label="Módulos"
 				>
-					{MODULE_LINKS.map(m => {
+					{visibleModuleLinks.map(m => {
 						const active = isActivePath(pathname, m.href);
 						return (
 							<Link
@@ -81,7 +81,7 @@ export function MainNav() {
 				</nav>
 
 				<div className="ml-auto flex shrink-0 items-center gap-2">
-					{/* {isLoaded &&
+					{isLoaded &&
 						(isSignedIn ? (
 							<UserButton
 								appearance={{
@@ -97,13 +97,10 @@ export function MainNav() {
 							>
 								Entrar
 							</Link>
-						))} */}
-					<Link
-						href="/login"
-						className="rounded-md px-2.5 py-1.5 text-sm font-medium text-main hover:bg-main/10 dark:hover:bg-main/15"
-					>
-						Entrar
-					</Link>
+						))}
+					{!isLoaded && (
+						<span className="h-9 w-9 shrink-0 rounded-full bg-slate-200/80 dark:bg-slate-700/80" aria-hidden />
+					)}
 					<ThemeToggle />
 					<Burger
 						opened={opened}
@@ -133,7 +130,7 @@ export function MainNav() {
 				}}
 			>
 				<Stack gap={4}>
-					{MODULE_LINKS.map(m => {
+					{visibleModuleLinks.map(m => {
 						const Icon = NAV_ICONS[m.href];
 						const active = isActivePath(pathname, m.href);
 						return (
@@ -144,18 +141,13 @@ export function MainNav() {
 								label={m.label}
 								leftSection={
 									Icon ? (
-										<Icon
-											className="h-[1.1rem] w-[1.1rem] shrink-0 opacity-90"
-											aria-hidden
-										/>
+										<Icon className="h-[1.1rem] w-[1.1rem] shrink-0 opacity-90" aria-hidden />
 									) : null
 								}
 								active={active}
 								onClick={close}
 								classNames={{
-									root: active
-										? "bg-main/12 text-main dark:bg-main/20"
-										: undefined,
+									root: active ? "bg-main/12 text-main dark:bg-main/20" : undefined,
 								}}
 							/>
 						);

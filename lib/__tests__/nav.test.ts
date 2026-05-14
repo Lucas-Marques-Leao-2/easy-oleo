@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MODULE_LINKS } from "../nav";
+import { MODULE_LINKS, moduleLinksVisibleForAppUser } from "../nav";
 
 describe("MODULE_LINKS", () => {
 	it("lista módulos esperados com href e label", () => {
@@ -24,5 +24,26 @@ describe("MODULE_LINKS", () => {
 	it("não há href duplicado", () => {
 		const hrefs = MODULE_LINKS.map((l) => l.href);
 		expect(new Set(hrefs).size).toBe(hrefs.length);
+	});
+});
+
+describe("moduleLinksVisibleForAppUser", () => {
+	it("inclui Usuários só para ADMIN", () => {
+		const admin = moduleLinksVisibleForAppUser({ role: "ADMIN" });
+		expect(admin.map((l) => l.href)).toContain("/usuarios");
+
+		const attendant = moduleLinksVisibleForAppUser({ role: "ATTENDANT" });
+		expect(attendant.map((l) => l.href)).not.toContain("/usuarios");
+
+		const seller = moduleLinksVisibleForAppUser({ role: "SELLER" });
+		expect(seller.map((l) => l.href)).not.toContain("/usuarios");
+	});
+
+	it("sem usuário na API não mostra Usuários", () => {
+		const none = moduleLinksVisibleForAppUser(null);
+		expect(none.map((l) => l.href)).not.toContain("/usuarios");
+
+		const undef = moduleLinksVisibleForAppUser(undefined);
+		expect(undef.map((l) => l.href)).not.toContain("/usuarios");
 	});
 });

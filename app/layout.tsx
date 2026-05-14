@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { Providers } from "@/components/context/providers";
-// import { ptBR } from "@clerk/localizations";
-// import { ClerkProvider } from "@clerk/nextjs";
+import { ptBR } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -26,14 +26,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
 			<body className="min-h-screen font-sans antialiased">
-				{/* <ClerkProvider
+				<ClerkProvider
 					localization={ptBR}
 					signInUrl="/login"
 					signUpUrl="/register"
 					afterSignOutUrl="/login"
-				> */}
-				<Providers>{children}</Providers>
-				{/* </ClerkProvider> */}
+				>
+					<Providers>{children}</Providers>
+				</ClerkProvider>
 			</body>
 		</html>
 	);

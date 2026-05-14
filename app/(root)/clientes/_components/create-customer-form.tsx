@@ -16,6 +16,7 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 
 import { CepInput } from "@/components/ui/cep-input";
 import { CpfCnpjInput } from "@/components/ui/cpf-cnpj-input";
+import { useApiAuth } from "@/hooks/use-api-auth";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import { fetchAddressByCep } from "@/lib/viacep";
 import {
@@ -65,6 +66,7 @@ const defaultValues: CreateCustomerFormValues = {
 
 export function CreateCustomerForm() {
   const queryClient = useQueryClient();
+  const auth = useApiAuth();
 
   const form = useForm<CreateCustomerFormValues>({
     defaultValues,
@@ -156,6 +158,7 @@ export function CreateCustomerForm() {
         });
       },
     },
+    request: auth,
   });
 
   return (

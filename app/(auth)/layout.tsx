@@ -2,6 +2,6 @@ import type { ReactNode } from "react";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
 	return (
-		<div className="min-h-screen bg-slate-950 text-slate-100 antialiased">{children}</div>
+		<div className="min-h-screen bg-slate-100 text-slate-900 antialiased">{children}</div>
 	);
 }
