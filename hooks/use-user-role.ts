@@ -14,7 +14,8 @@ export type AppRole = keyof typeof APP_ROLE_PRIORITIES;
 
 export function normalizeAppRole(role: string | null | undefined): AppRole | null {
 	if (!role) return null;
-	if (role in APP_ROLE_PRIORITIES) return role as AppRole;
+	const key = role.trim().toUpperCase();
+	if (key in APP_ROLE_PRIORITIES) return key as AppRole;
 	return null;
 }
 

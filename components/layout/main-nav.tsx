@@ -41,7 +41,10 @@ export function MainNav() {
 	const isDesktop = useMediaQuery("(min-width: 48em)");
 	const { isLoaded, isSignedIn } = useAuth();
 	const { user: appUser } = useUser();
-	const visibleModuleLinks = useMemo(() => moduleLinksVisibleForAppUser(appUser), [appUser]);
+	const visibleModuleLinks = useMemo(
+		() => moduleLinksVisibleForAppUser(appUser),
+		[appUser?.id, appUser?.role],
+	);
 
 	useEffect(() => {
 		close();

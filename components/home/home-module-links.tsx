@@ -8,7 +8,7 @@ import { moduleLinksVisibleForAppUser } from "@/lib/nav";
 
 export function HomeModuleLinks() {
 	const { user } = useUser();
-	const links = useMemo(() => moduleLinksVisibleForAppUser(user), [user]);
+	const links = useMemo(() => moduleLinksVisibleForAppUser(user), [user?.id, user?.role]);
 
 	return (
 		<ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

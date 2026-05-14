@@ -31,6 +31,11 @@ describe("user-role", () => {
 		expect(userRoleIsLower("ADMIN", "ADMIN")).toBe(false);
 	});
 
+	it("normaliza role com espaços ou minúsculas", () => {
+		expect(normalizeAppRole(" admin ")).toBe("ADMIN");
+		expect(userRoleIsAtLeast("admin", "ADMIN")).toBe(true);
+	});
+
 	it("userRoleIs", () => {
 		expect(userRoleIs("SELLER", "SELLER")).toBe(true);
 		expect(userRoleIs("SELLER", "ADMIN")).toBe(false);
