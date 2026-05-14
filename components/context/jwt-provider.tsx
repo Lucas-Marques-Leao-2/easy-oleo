@@ -27,7 +27,7 @@ export const JwtProvider = memo(function JwtProvider({ children }: PropsWithChil
 			setJwt(null);
 			return;
 		}
-		const token = await getToken();
+		const token = await getToken({ template: "jwt" });
 		setJwt(token);
 	}, [getToken, isLoaded, isSignedIn, userId]);
 
