@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
+import { Modal, Button } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { ListSection, PageShell, SectionCard } from "@/components/layout/page-layout";
+import { ListSection, PageShell } from "@/components/layout/page-layout";
 import { apiErrorMessage } from "@/lib/api-error-message";
 import { formatCpfOrCnpjDocument } from "@/lib/format-brazilian-doc";
 import {
@@ -14,8 +17,16 @@ import {
 import { CreateCustomerForm } from "./_components/create-customer-form";
 
 export default function CustomersPage() {
+	const [opened, setOpened] = useState(false);
+
 	const queryClient = useQueryClient();
-	const { data: customers = [], isPending, isError, error } = useCustomersControllerFindAll();
+
+	const {
+		data: customers = [],
+		isPending,
+		isError,
+		error,
+	} = useCustomersControllerFindAll();
 
 	const remove = useCustomersControllerRemove({
 		mutation: {
@@ -32,18 +43,22 @@ export default function CustomersPage() {
 
 	return (
 		<PageShell title="Clientes">
-			<SectionCard
-				title="Novo"
-				titleId="clientes-novo"
-			>
-				<CreateCustomerForm />
-			</SectionCard>
-
 			<ListSection
 				title="Lista"
 				headingId="clientes-lista"
 			>
-				{isPending && <p className="text-sm text-typography-lv2 dark:text-slate-400">Carregando…</p>}
+				<div className="mb-4 flex justify-end">
+					<Button onClick={() => setOpened(true)}>
+						Adicionar
+					</Button>
+				</div>
+
+				{isPending && (
+					<p className="text-sm text-typography-lv2 dark:text-slate-400">
+						Carregando…
+					</p>
+				)}
+
 				{isError && (
 					<p
 						className="text-sm text-red-600 dark:text-red-400"
@@ -52,6 +67,7 @@ export default function CustomersPage() {
 						{apiErrorMessage(error)}
 					</p>
 				)}
+
 				{!isPending && !isError && (
 					<div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
 						<table className="w-full min-w-[640px] border-collapse text-sm">
@@ -60,24 +76,30 @@ export default function CustomersPage() {
 									<th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
 										Nome
 									</th>
+
 									<th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
 										Documento
 									</th>
+
 									<th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
 										Cidade / UF
 									</th>
+
 									<th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
 										E-mail
 									</th>
+
 									<th className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
 										Telefones
 									</th>
+
 									<th
 										className="whitespace-nowrap border-b border-slate-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold text-typography-lv2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
 										aria-label="Actions"
 									/>
 								</tr>
 							</thead>
+
 							<tbody>
 								{customers.map(row => (
 									<tr
@@ -87,18 +109,23 @@ export default function CustomersPage() {
 										<td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
 											{row.name}
 										</td>
+
 										<td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
 											{formatCpfOrCnpjDocument(row.document)}
 										</td>
+
 										<td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
 											{row.city} / {row.state}
 										</td>
+
 										<td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
 											{row.email}
 										</td>
+
 										<td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
 											{row.phones.map(p => p.number).join(", ") || "—"}
 										</td>
+
 										<td className="border-b border-slate-200 px-3 py-2 align-top text-typography-lv1 dark:border-slate-700 dark:text-slate-200">
 											<button
 												type="button"
@@ -115,6 +142,16 @@ export default function CustomersPage() {
 						</table>
 					</div>
 				)}
+
+				<Modal
+					opened={opened}
+					onClose={() => setOpened(false)}
+					title="Adicionar cliente"
+					centered
+					size="lg"
+				>
+					<CreateCustomerForm />
+				</Modal>
 			</ListSection>
 		</PageShell>
 	);
